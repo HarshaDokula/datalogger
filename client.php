@@ -1,6 +1,18 @@
-<?php 
+<?php
 require_once 'config.php';
 session_start();
+$id = $_SESSION['id'];
+if(!isset($_SESSION['id']))
+{
+	header('Location:index.html');
+}
+else {
+	$query = "select * from users where id=$id;";
+	$result = mysqli_query($conn,$query);
+  $row = mysqli_fetch_array($result);
+	if (strcmp($row['isClient'],1)){
+	header('Location:index.html');}
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,23 +45,25 @@ session_start();
 	<div class="container mt-4">
 		<h2 class="display-3">Clients Area</h2>
 		<hr>
-		<?php 
+		<?php
 		$id = $_SESSION['id'];
 		if(!isset($id)) {
-			header("location:index.html");							
+			header("location:index.html");
 		}
 		$query = "select * from projects where clientID=$id;";
 		$result = mysqli_query($conn,$query);
+		echo "<div class='row'>";
+		echo "<div class='col-12'>";
+		echo "<select class='form-control'>";
 		while($row=mysqli_fetch_array($result)) {
-			echo "<div class='row'>";
-			echo "<div class='col-12'>";
-			echo "<h3>Project Title:</h3>";
-			echo "<p>".$row['title']."</p>";
-			echo "<h3>Project Description:</h3>";
-			echo "<p>".$row['description']."</p>";
-			echo "</div></div>";
-			echo "<hr>";
+
+
+			echo "<option>".$row['title']."</option>";
+
+
+
 		}
+		echo "</div></div>";
 		?>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

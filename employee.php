@@ -1,6 +1,18 @@
-<?php 
+<?php
 require_once 'config.php';
 session_start();
+$id = $_SESSION['id'];
+if(!isset($_SESSION['id']))
+{
+	header('Location:index.html');
+}
+else{
+	$query = "select * from users where id = $id;";
+	$result = mysqli_query($conn,$query);
+  $row = mysqli_fetch_array($result);
+	if (strcmp($row['isEmployee'],1)){
+	header('Location:index.html');}
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,10 +56,10 @@ session_start();
 				<div class="col-12">
 					<label for="client">Select Client</label>
 					<select name="client" id="client" class="form-control" required>
-						<?php 
+						<?php
 						$id = $_SESSION['id'];
 						if(!isset($id)) {
-							header("location:index.html");							
+							header("location:index.html");
 						}
 						$query = "select * from employees where employee=$id;";
 						$result = mysqli_query($conn,$query);
@@ -86,14 +98,14 @@ session_start();
 </body>
 </html>
 
-<?php 
+<?php
 if(isset($_REQUEST['submit'])) {
 	$time = $_REQUEST['time'];
 	$client = $_REQUEST['client'];
 	$log = $_REQUEST['log'];
 	$id = $_SESSION['id'];
 	if(!isset($id)) {
-		header("location:index.html");							
+		header("location:index.html");
 	}
 	$query = "INSERT INTO employeeLog(`empID`,`clientID`,`time`,`log`) VALUES($id,$client,'$time','$log')";
 	$result = mysqli_query($conn,$query);

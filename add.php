@@ -1,5 +1,18 @@
-<?php 
+<?php
 require_once 'config.php';
+session_start();
+$id = $_SESSION['id'];
+if(!isset($_SESSION['id']))
+{
+	header('Location:index.html');
+}
+// else {
+// 	$query = "select * from users where id = $id;";
+// 	$result = mysqli_query($conn,$query);
+// 	$row = mysqli_fetch_array($result);
+// 	if (!strcmp($row['isClient'],1)){
+// 	header('Location:index.html');}
+// }
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,12 +23,12 @@ require_once 'config.php';
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 </head>
 <body>
-	<?php 
+	<?php
 	ob_start();
 	include "nav.html";
 	$out1 = ob_get_clean();
 	echo $out1;
-	?> 
+	?>
 	<div class="container">
 		<h2>Add Member</h2>
 		<hr>
@@ -48,7 +61,7 @@ require_once 'config.php';
 </body>
 </html>
 
-<?php 
+<?php
 if(isset($_REQUEST['submit'])) {
 	$name = ucfirst($_REQUEST['name']);
 	$role = $_REQUEST['role'];

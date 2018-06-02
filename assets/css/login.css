@@ -36,6 +36,8 @@ body {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+  -moz-appearance: textfield;
+
 }
 .form-signin input[type="password"] {
   margin-bottom: 10px;
@@ -43,8 +45,8 @@ body {
   border-top-right-radius: 0;
 }
 
-.form-signin input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+.form-signin input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
