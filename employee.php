@@ -56,6 +56,7 @@ else{
 				<div class="col-12">
 					<label for="client">Select Client</label>
 					<select name="client" id="client" class="form-control" required>
+						<option value="" selected disabled>Select Client</option>
 						<?php
 						$id = $_SESSION['id'];
 						if(!isset($id)) {
@@ -64,11 +65,33 @@ else{
 						$query = "select * from employees where employee=$id;";
 						$result = mysqli_query($conn,$query);
 						while($row=mysqli_fetch_array($result)) {
-							$client = mysqli_query($conn,"select * from users where id=".$row['client']);
+							$client = mysqli_query($conn,"select distinct * from users where id=".$row['client']);
 							$clientName = mysqli_fetch_array($client);
 							echo "<option value='".$row['client']."'>".$clientName['name']."</option>";
 						}
 						?>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+			  <div class="col-12">
+					<label for="project">Select Project</label>
+					<select name="project" id="project" class="form-control" required>
+						<option value="" selected disabled>Select Project</option>
+
+					<?php
+						$id = $_SESSION['id'];
+						$query = "select * from employees where employee=$id";
+						$result = mysqli_query($conn,$query);
+						while($row = mysqli_fetch_array($result)){
+						$projectID = $row['projectID'];
+							$sql = mysqli_query($conn,"select * from projects where id=$projectID");
+							while($ro = mysqli_fetch_array($sql)) {
+								echo "<option value='".$row['projectID']."'>".$ro['title']."</option>";
+								}
+						}
+					?>
+
 					</select>
 				</div>
 			</div>
@@ -85,14 +108,20 @@ else{
 			</div>
 		</form>
 	</div>
-	<script>
-		let time = document.querySelector("#time");
-		let d = new Date(),
-		h = (d.getHours()<10?'0':'') + d.getHours(),
-		m = (d.getMinutes()<10?'0':'') + d.getMinutes();
-		time.value = h + ':' + m;
-	</script>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			$("#client").on("change",function(){
+				let client = document.querySelector("#client").value;
+				console.log(client);
+
+
+			});
+
+		});
+	</script>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </body>
@@ -104,15 +133,16 @@ if(isset($_REQUEST['submit'])) {
 	$client = $_REQUEST['client'];
 	$log = $_REQUEST['log'];
 	$id = $_SESSION['id'];
+	$pid = $_REQUEST['project'];
 	if(!isset($id)) {
 		header("location:index.html");
 	}
-	$query = "INSERT INTO employeeLog(`empID`,`clientID`,`time`,`log`) VALUES($id,$client,'$time','$log')";
+	$query = "INSERT INTO employeeLog(`empID`,`clientID`,`projectID`,`time`,`log`) VALUES($id,$client,$pid,'$time','$log')";
 	$result = mysqli_query($conn,$query);
 	if($result) {
 		echo "Sucess";
 	} else {
-		echo "Error: ".mysqli_error();
+		echo "Error: ".mysqli_error($conn);
 	}
 }
 ?>

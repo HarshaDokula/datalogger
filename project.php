@@ -91,14 +91,17 @@ require_once 'config.php';
 			$query = "INSERT INTO projects(`title`,`description`,`clientID`,`employees`) VALUES('$title','$desc','$client','$employee');";
 			$mysql = mysqli_query($conn,$query);
 			foreach($_REQUEST['employee'] as $employe) {
-				$q = "INSERT INTO employees(`client`,`employee`) VALUES('$client','$employe');";
-				$exec = mysqli_query($conn,$q) or die('Error: '.mysqli_error());
+				$sql = mysqli_query($conn,"SELECT * FROM `projects` order by id desc limit 1") or die('Error: '.mysqli_error($conn));
+				$row = mysqli_fetch_array($sql);
+				$projectID = $row['id'];
+				$q = "INSERT INTO employees(`client`,`employee`,`projectID`) VALUES('$client','$employe',$projectID);";
+				$exec = mysqli_query($conn,$q) or die('Error: '.mysqli_error($conn));
 
 			}
 			if($mysql) {
-				$e = mysqli_query($conn,"select * from projects where clientID='$client'") or die('Error: '.mysqli_error());
-				$id = mysqli_fetch_array($e);
-				
+				// $e = mysqli_query($conn,"select * from projects where clientID='$client'") or die('Error: '.mysqli_error());
+				// $id = mysqli_fetch_array($e);
+
 
 				echo "Success";
 			} else {

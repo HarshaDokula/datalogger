@@ -54,19 +54,44 @@ else {
 		$result = mysqli_query($conn,$query);
 		echo "<div class='row'>";
 		echo "<div class='col-12'>";
-		echo "<select class='form-control'>";
+		echo "<select class='form-control' onchange='projectID()' required>";
+		echo "<option value='' selected disabled>Select Project</option>";
 		while($row=mysqli_fetch_array($result)) {
 
 
-			echo "<option>".$row['title']."</option>";
+			echo "<option value='".$row['id']."'>".$row['title']."</option>";
 
 
 
 		}
 		echo "</div></div>";
 		?>
+		<div class='row'>
+			<div class='col-12'>
+				<?php
+
+				if(isset($_GET['projectID'])) {
+					$pid = $_GET['projectID'];
+					echo "<p>testing".$pid."</p>";
+				}
+
+				 ?>
+			</div>
+		</div>
 	</div>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript">
+		function projectID() {
+			let projectID = $("select").val();
+			$.ajax(
+				{
+					type:"GET",
+					url: 'client.php',
+					data: {projectID:projectID}
+				}
+			)
+		}
+	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </body>
